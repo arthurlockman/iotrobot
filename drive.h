@@ -59,6 +59,14 @@ public:
   void setFrontRight(float speed) { setMotor(m_frontRightMotor, speed); }
 
   void setBackRight(float speed) { setMotor(m_backRightMotor, speed); }
+  
+  void stopMotors()
+  {
+    setFrontLeft(0.0f);
+    setFrontRight(0.0f);
+    setBackLeft(0.0f);
+    setBackRight(0.0f);
+  }
 
 protected:
   void setMotor(Adafruit_DCMotor *motor, float speed)  {

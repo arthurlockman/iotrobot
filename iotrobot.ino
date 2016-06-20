@@ -1,3 +1,4 @@
+
 /*
  * iotrobot.ino - A simple IoT-enabled robot that communicates over MQTT
  * Copyright (C) 2015 Red Hat, Inc.
@@ -45,7 +46,7 @@ Sensors sensors;
 SFE_CC3000 wifi = SFE_CC3000(2, 7, 10);
 SFE_CC3000_Client wifiClient = SFE_CC3000_Client(wifi);
 
-byte BROKER_ADDRESS[] = {192, 168, 1, 1};
+byte BROKER_ADDRESS[] = {10, 42, 0, 1};
 PubSubClient mqttClient(BROKER_ADDRESS, 1883, onPublish, wifiClient);
 
 /*
@@ -65,14 +66,20 @@ void setup() {
   }
 
   LOG("Connecting to access point...");
-  while (!wifi.connect("nuc", WLAN_SEC_WPA2, "redhat123", 10000)) {
+  while (!wifi.connect("robotgateway", WLAN_SEC_WPA2, "WQg6tKWf", 10000)) {
     LOG("Error connecting to access point.");
     delay(1000);
     LOG("Retrying...");
   }
-
+  ConnectionInfo connection_info;
+  wifi.getConnectionInfo(connection_info);
+  for (int i = 0; i < 4; i++)  
+  {
+     Serial.print(connection_info.ip_address[i]);
+     Serial.print(".");
+  }
   LOG("Connecting to MQTT broker...");
-  while (!mqttClient.connect("iotrobot", "admin", "admin")) {
+  while (!mqttClient.connect("amq", "admin", "admin")) {
     LOG("Error connecting to MQTT broker.");
     delay(1000);
     LOG("Retrying...");
@@ -89,9 +96,14 @@ void setup() {
 
 void loop() {
   // Publish everything
-  sensors.publish(mqttClient);
-
-  mqttClient.loop();
+  if (wifi.getConnectionStatus())
+  {
+    sensors.publish(mqttClient);
+    mqttClient.loop();
+  } else
+  {
+    drive.stopMotors();
+  }
 }
 
 void onPublish(char *topic, byte *payload, unsigned int len) {

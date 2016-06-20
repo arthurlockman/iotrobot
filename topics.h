@@ -30,6 +30,7 @@ static char const ROBOT_MAGNETOMETER_Y[] PROGMEM = "robot/mag/y";
 static char const ROBOT_MAGNETOMETER_Z[] PROGMEM = "robot/mag/z";
 static char const ROBOT_ANGLE_ROLL[] PROGMEM = "robot/angle/roll";
 static char const ROBOT_ANGLE_PITCH[] PROGMEM = "robot/angle/pitch";
+static char const ROBOT_ANGLE_HEADING[] PROGMEM = "robot/angle/heading";
 static char const ROBOT_TEMPERATURE[] PROGMEM = "robot/temperature";
 static char const ROBOT_MOTOR_FRONT_LEFT[] PROGMEM = "robot/motor/frontLeft";
 static char const ROBOT_MOTOR_BACK_LEFT[] PROGMEM = "robot/motor/backLeft";

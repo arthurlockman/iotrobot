@@ -29,8 +29,9 @@ class Sensors {
   SFE_BMP180 m_temperatureSensor;
 
   float m_temperature;
-  float m_filteredRoll, m_filteredPitch;
+  float m_filteredRoll, m_filteredPitch, m_heading;
   unsigned long m_lastCalcTime;
+  const float Pi = 3.14159;
 
 public:
   void begin() {
@@ -98,6 +99,7 @@ public:
     // Publish the roll and pitch
     mqttClient.publish(getTopicString(ROBOT_ANGLE_ROLL), (byte *)&m_filteredRoll, 4);
     mqttClient.publish(getTopicString(ROBOT_ANGLE_PITCH), (byte *)&m_filteredPitch, 4);
+    mqttClient.publish(getTopicString(ROBOT_ANGLE_HEADING), (byte *)&m_heading, 4);
   }
 
 private:
@@ -132,6 +134,8 @@ private:
     const float pitch = degrees(atan2(accelY, sqrt(accelX2 + accelZ2)));
     m_filteredPitch = FILTER_CONSTANT * (m_filteredPitch + gyroX * dt)
         + (1 - FILTER_CONSTANT) * pitch;
+        
+    m_heading = (atan2(m_accelerometer.magData.y, m_accelerometer.magData.x) * 180) / Pi;
   }
 };
 
