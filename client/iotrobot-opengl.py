@@ -100,7 +100,7 @@ class IoTRobotGraphicalClient:
         if not self.dirty: return
         self.dirty = False
 
-        if "robot/angle/roll" in self.sensors and "robot/angle/pitch" in self.sensors:
+        if "robot/angle/roll" in self.sensors and "robot/angle/pitch" in self.sensors and "robot/angle/heading" in self.sensors:
             # Draw a box rotated by the calculated Euler angles
             glViewport(0, 0, self.width, self.height)
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
@@ -108,6 +108,7 @@ class IoTRobotGraphicalClient:
             glPushMatrix()
 
             glRotatef(self.sensors["robot/angle/pitch"], 1, 0, 0)
+            glRotatef(self.sensors["robot/angle/heading"], 0, 1, 0)
             glRotatef(self.sensors["robot/angle/roll"], 0, 0, 1)
 
             glBegin(GL_QUADS)
